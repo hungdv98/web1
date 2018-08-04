@@ -1,0 +1,163 @@
+<% if !logged_in? %>
+  <div id="top-menu">
+    <div id="account">
+      <ul>
+        <li><%= link_to t("sign_in"), login_path, class: "login" %></li>
+        <li><%= link_to t("register"), register_path, class: "register" %></a></li>
+      </ul>
+    </div>
+  </div>
+  <div id="header">
+    <%= link_to image_tag("logo.png", alt: " logo"),root_url %>
+  </div>
+<% else %>
+  <div id="top-menu">
+    <div id="account">
+      <ul>
+        <li>
+          <%= link_to edit_user_path(current_user) do %>
+            <i class="fa fa-user"></i>
+          <% end %>
+        </li>
+        <li><%= link_to "account", logout_path, method: :delete, class: "logout" %></a></li>
+      </ul>
+    </div>
+    <div id="loggedas">
+      <%= t "account" %> »
+      <a class="user active" >
+      <%= link_to current_user.login_name, current_user %>
+      </a>
+      <li class="language_li">
+        <%= link_to locale:"en" do %>
+          <%= image_tag "united-kingdom.png", class: "language_flag_right" %>
+        <% end %> |
+        <%= link_to locale:"vi" do %>
+          <%= image_tag "vietnam.png", class: "language_flag_left" %>
+        <% end %>
+      </li>
+    </div>
+    <ul>
+      <li><%= link_to t("my_page"), my_page_path(current_user.id), class: "my-page" %></li>
+      <li><%= link_to t("project"), projects_url, class: "projects" %></li>
+      <li><%= link_to t("help"), "#", class: "help" %></li>
+      <li><%= link_to "Templates", issue_templates_path, class: "help" %></li>
+      <% if current_user.user_type==0 %>
+        <li>
+          <%= link_to t("user"), users_path, class: "fa fa-users" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div id="header">
+    <div id="quick-search">
+      <%= form_tag search_issues_search_path, method: :get, remote: true do %>
+        <label for="q">
+          <a accesskey="4" href="/search"><%= t "search" %></a>:
+        </label>
+        <span class="icon-search">
+          <%= text_field_tag :q, params[:search], accesskey: "f", class: "small" %>
+        </span>
+        <%= submit_tag "Search", id: "search-issue", style: "display: none;" %>
+      <% end %>
+      <div class="select2-container" id="s2id_project_quick_jump_box" style="width: 210px;">
+        <% tmp = UserProject.includes(:project).where("user_id = ?", current_user.id) %>
+        <%=select_tag "textcolor",
+          options_for_select(tmp.all.collect{ |o| [o.project.name, o.project_id] }),
+          :include_blank => t("jump_project") %>
+        <script type="text/javascript">
+          $('#textcolor').change(function(){
+            var gid = $(this).val();
+            window.location.href = "http://localhost:3000/projects/"+gid;
+          });
+        </script>
+        <style type="text/css">
+          #textcolor{
+          color: white;
+          background-color: rgba(71, 77, 87, 0.3);
+          border-color:rgba(71, 77, 87, 0.5);
+          width: 200px;
+          text-align: center;
+          }
+        </style>
+        <span class="select2-arrow" role="presentation"><b role="presentation"></b></span>
+        <label for="s2id_autogen1" class="select2-offscreen"></label>
+        <input class="select2-focusser select2-offscreen" aria-haspopup="true" role="button" aria-labelledby="select2-chosen-1" id="s2id_autogen1" type="text">
+        <div class="select2-drop select2-display-none select2-with-searchbox">
+          <div class="select2-search">
+            <label for="s2id_autogen1_search" class="select2-offscreen"></label>
+            <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="select2-input" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-owns="select2-results-1" id="s2id_autogen1_search" placeholder="" type="text">
+          </div>
+          <ul class="select2-results" role="listbox" id="select2-results-1"></ul>
+        </div>
+      </div>
+    </div>
+    <%= link_to image_tag("logo.png", alt: " logo"),root_url %>
+  </div>
+  <% get_prj_id %>
+  <% if current_project != nil %>
+    <% current_project.name  %>
+  <% end %>
+  <% if current_user.user_type == 0%>
+    <div id="main-menu">
+      <ul>
+        <li>
+          <%= link_to t("overview"), projects_path, class: "overview" %>
+        </li>
+        <li>
+          <%= link_to t("actions"), actions_path, class: "activity" %>
+        </li>
+        <li>
+          <%= link_to t("issue"), issues_path, class: "issues" %>
+        </li>
+        <li>
+          <%= link_to t("create_issue"), new_issue_path, class: "new-issue" %>
+        </li>
+        <li>
+          <%= link_to t("emoji"), emojis_path %>
+        </li>
+      </ul>
+    </div>
+  <% else %>
+    <% if (params[:controller] != 'users') and (params[:controller] != 'homes') and (params[:controller] != 'my_pages') and (current_project != nil)
+    %>
+      <div id="main-menu">
+        <ul>
+          <li>
+            <%= link_to t("overview"), project_path(current_project.id), class: "overview" %>
+          </li>
+          <li>
+            <%= link_to t("actions"), actions_path, class: "activity" %>
+          </li>
+          <li>
+            <%= link_to t("issue"), issues_path, class: "issues" %>
+          </li>
+          <li>
+            <%= link_to t("create_issue"), new_issue_path, class: "new-issue" %>
+          </li>
+          <li>
+            <%= link_to t("emoji"), emojis_path %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+<script type="text/javascript">
+  $(document).on("keypress", ".small", function(event) {
+    return event.keyCode != 13;
+  });
+  $('.small').keypress(function(event){
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if (keycode == '13') {
+      var x = $(".small").val();
+      if (x.length>0)
+      {
+        $("#search-issue").click();
+      }
+      else
+      {
+        alert("Thong tin tim kiem khong hop le hoac khong ton tai, vui long thu lai!")
+      }
+    }
+  });
+</script>

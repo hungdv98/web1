@@ -1,0 +1,189 @@
+<style type="text/css">
+  .cke_inner{
+  display: none;
+}
+</style>
+<%#= render "issues/show" %>
+<% @issues.ids.each_with_index do |item, index| %>
+  <% if item == @issue.id %>
+    <% @vt = index+1 %>
+  <% end %>
+<% end %>
+<%= t "edit" %>
+<%= render "form_choose_template" %>
+<div class="box tabular" id="form-edit">
+  <%= t "views.isuse.edit.change_value" %>
+  <hr/>
+  <div id="all_attributes">
+    <div id="template_area" style="margin-top: 4pt;">
+      <div class="template_help box" id="template_help_content"
+        style="display: none;">
+        <div id="template_help_hide">
+          <%= link_to "[x]", "#" %>
+        </div>
+      </div>
+    </div>
+    <%= form_for @issue do |f| %>
+    <p><%= render "shared/error_messages", object: f.object %></p>
+    <!-- <p>
+      <%#= f.label :project_id %>
+      <%#= f.select(:project_id, UserProject.includes(:project).where("user_id = ?",
+      current_user.id).collect {|d| [d.project.name,d.project_id]},
+      {:class => "some_class"} ) %>
+    </p> -->
+    <p>
+      <%= f.label :type_issue %>
+      <%= f.select(:type_issue, [['Task', '1'], ['Bug', '2']], {remote: true, method: :get}) %>
+    </p>
+    <p>
+      <%= f.label :template_id %>
+      <%=select_tag "textcolor1",
+        options_for_select(IssueTemplate.where("type_template=?", 1).collect{ |o| [o.name, o.id] }), :include_blank => true %>
+      <%= link_to "Clear subject and description text.", "" %>
+      <span id="template_status-area"></span>
+    </p>
+    <p>
+      <%= f.label :subject %>
+      <%= f.text_field :subject, style: "width:90%;", class: "subject1" %>
+    </p>
+    <p>
+      <%= f.label :description %>
+      <a class="fa fa-pencil" id="link_ck_editor"></a>
+      <p id="test-id">
+        <%= cktext_area_tag :description, @issue.description, class: "description1", rows: 10, size: "30x20" %>
+      </p>
+    </p>
+    </p>
+    <div id="attributes" class="attributes">
+      <div class="splitcontent">
+        <div class="splitcontentleft">
+          <p>
+            <%= f.label :status %>
+            <%= f.select :status, ['New', 'In Progress', 'Resolved', 'Closed']%>
+          </p>
+          <p>
+            <%= f.label :priority %>
+            <%= f.select :priority, options_for_select([['Low', 1], ['In Normal', 2], ['High', 3], ['Urgent', 4], ['Immediate', 5]]) %>
+          </p>
+          <p>
+            <%= f.label :assignee %>
+            <%= f.select(:assignee, User.joins(:user_projects).where("project_id = ?", session[:project_id]).collect {|d| [d.email,d.id]},
+            {:include_blank => ""}, {:class => "some_class"} ) %>
+          </p>
+        </div>
+        <div class="splitcontentright">
+          <p id="parent_issue">
+            <%= f.label :parent_id %>
+            <span class="icon-search">
+            <%= f.text_field :parent_id, class: "parent-task", style: "padding-left: 25px;" %>
+            <div id="show-parent"></div>
+          </p>
+          <p id="start_date_area">
+            <%= f.label :start_date %>
+            <%= f.text_field :start_date, class: "datepicker start-date" %>
+            <i class="fa fa-calendar"></i>
+          </p>
+          <p id="due_date_area">
+            <%= f.label :expired_date %>
+            <%= f.text_field :expired_date, class: "datepicker expired-date" %>
+            <i class="fa fa-calendar"></i>
+          </p>
+          <p id="alert-dtpicker"></p>
+          <p>
+            <%= f.label :estimate_time %>
+            <%= f.text_field :estimate_time %> Giờ
+          </p>
+          <p>
+            <%= f.label :percent_progress %>
+            <%= f.select :percent_progress, ['0%', '10%', '20%', '40%', '50%',
+              '100%'] %>
+          </p>
+        </div>
+      <p>
+        <%= f.label :picture %>
+        <%= f.file_field :pictures, multiple: true %>
+      </p>
+      </div>
+    </div>
+    <%= f.submit t("btn_save"), class: "button-save"%>
+    <!-- <a class= "button-save link-preview" ><%#= t "preview" %></a> -->
+    <div class="splitcontentright"></div>
+    <%= link_to t("views.issue.edit.out"), {controller: "issues", action: "show", id: @issue.id, index: @vt}, class: "bo-qua" %>
+    <!-- <div class="preview-description">
+      <%#= t "description" %>
+    </div> -->
+    <% end %>
+  </div>
+</div>
+<div id="form-tag-seach-parent" style="display: none;">
+  <%= form_tag search_issues_path, method: :get, remote: true do %>
+    <span class="icon-search">
+    <%= text_field_tag :search, "", size:25, autocomplete: :off %>
+    <%= hidden_field_tag :current_issue, @issue.id %>
+    <%= submit_tag "Search", id: "search-key1", style: "display: none;" %>
+<% end %>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#link_ck_editor").click(function() {
+      $(".cke_inner").show();
+      $("#link_ck_editor").hide();
+    })
+  })
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.datepicker').datepicker({
+      format: 'dd-mm-yyyy'
+    });
+    $(".button-save").hover(function() {
+      var fromdate = $(".start-date").datepicker('getDate');
+      var todate = $(".expired-date").datepicker('getDate');
+      if ((todate < fromdate || fromdate == null) && todate != null) {
+        alert("input date invalid.");
+      }
+    });
+    $(".preview-description").hide();
+    $(".link-preview").click(function() {
+      $(".preview-description").show();
+      var subject = $(".subject1").val();
+      if(subject!="")
+      {
+        $(".preview-description").html("<h2>Mo ta</h2><hr style='border: 1px solid gray'/><p style='padding-left: 0px !important;'>"+$(".description1").val()+"</p>");
+      }
+      else
+      {
+        $(".subject1").focus();
+      }
+    });
+    $(".trich-dan").click(function() {
+      $(".description1").focus();
+    });
+  })
+</script>
+<script type="text/javascript">
+  $(function() {
+    $(".parent-task").mouseout(function() {
+      var x = $(".parent-task").val();
+      if (x.length>0)
+      {
+        $("#search").val(x);
+        $("#search-key1").click()
+      }
+      else
+      {
+        $("#show-parent").hide();
+      }
+    })
+  });
+  $('#issue_type_issue').click(function(){
+    var value = $(this).val();
+    $("#choose_type_issue").val(value);
+    $("#search-key").click();
+   });
+  $('#textcolor1').click(function(){
+    var template = $(this).val();
+    $("#choose_template").val(template);
+    $("#choose-template").click();
+   });
+</script>

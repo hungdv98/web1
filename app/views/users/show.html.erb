@@ -1,0 +1,86 @@
+<h2>
+  <img default="default" rating="PG" alt="" title=""
+    class="gravatar" ssl="false" src="http://www.gravatar.com/avatar/bf15d543da15121752d56fa811f887a3?rating=PG&amp;size=50&amp;default=monsterid"
+    width="50" height="50" /> <%= @user.login_name %>
+</h2>
+<div class="splitcontentleft">
+<ul>
+  <li><%= t "views.user.show.register_on" %>: <%= @user.created_at.strftime("%d-%m-%Y") %></li>
+  <li><%= t "views.user.show.last_connect" %>: <%= @user.last_login.strftime("%d-%m-%Y") unless @user.last_login.nil? %></li>
+</ul>
+<h3><%= t "project" %></h3>
+<ul>
+  <% @project.each do |project| %>
+    <% if Project.where("id=? and user_id=?", project.project_id, current_user.id).count>0%>
+      <li>
+        <%= link_to project.project.name, project_path(project.project.id) %>
+        (Manager, <%= project.created_at.strftime("%d-%m-%Y") %>)
+      </li>
+    <% else %>
+      <li>
+        <%= link_to project.project.name, project_path(project.project.id) %>
+        (Developer, <%= project.created_at.strftime("%d-%m-%Y") %>)
+      </li>
+    <% end %>
+  <% end %>
+    <% @mn = Project.find_by(user_id: current_user.id)%>
+    <% if @mn.nil? %>
+    <% else %>
+      <li>
+        <%= link_to @mn.name, project_path(@mn.id) %>
+        (Manager, <%= @mn.created_at.strftime("%d-%m-%Y") %>)
+      </li>
+    <% end %>
+</ul>
+</div>
+<div class="splitcontentright">
+<h3><%= link_to t("views.user.show.activity"), actions_path %></h3>
+<p>
+  <%= t "views.my_page.report_issue" %>: <%= @issue.count %>
+</p>
+<div id="activity">
+  <% @d.each do |day| %>
+    <h4><%= day %></h4>
+    <dl>
+      <% @issue_add.where("DATE(created_at) =?", day).each do |issue| %>
+        <% @issues.ids.each_with_index do |item, index| %>
+          <% if item == issue.id %>
+            <% @vt1 = index+1 %>
+          <% end %>
+        <% end %>
+        <dt class="issue-edit">
+          <span class="time"><%= Issue.find_by(id: issue.id).created_at.strftime("%H:%M") %></span>
+          <span class="project">
+            <% if Project.find_by(id: issue.project_id) != nil %>
+              <%= Project.find_by(id: issue.project_id).name %>
+            <% end %>
+          </span>
+          <%= issue.estimate_time+"(Task #"+issue.id.to_s+"("+issue.status+"):"+issue.subject %>
+          <%#= link_to issue.estimate_time+"(Task #"+issue.id.to_s+"("+issue.status+"):"+issue.subject, {controller: "issues", action: "show", id: issue.id, index: @vt1} %>
+        </dt>
+        <dd>
+          <span class="description"><%= raw issue.description[0,100]+"...." %></span>
+        </dd>
+      <% end %>
+      <% @issue_update.where("DATE(created_at) =?", day).uniq(&:issue_id).each do |issue_up| %>
+        <% @issues.ids.each_with_index do |item, index| %>
+          <% if item == issue_up.id %>
+            <%= @vt2 = index+1 %>
+          <% end %>
+        <% end %>
+        <% Issue.where("id=? and DATE(created_at) !=?",issue_up.issue_id, day).each do |a| %>
+            <dt class="issue-edit">
+              <span class="time"><%= History.order("created_at DESC").find_by(issue_id: issue_up.issue_id).created_at.strftime("%H:%M") %></span>
+              <span class="project"><%= Project.find_by(id: issue_up.project_id).name %></span>
+              <%#= link_to issue_up.issue.estimate_time+"(Task #"+issue_up.issue_id.to_s+"("+issue_up.issue.status+"):"+issue_up.issue.subject, {controller: "issues", action: "show", id: issue_up.issue_id, index: @vt2} %>
+              <%= issue_up.issue.estimate_time+"(Task #"+issue_up.issue_id.to_s+"("+issue_up.issue.status+"):"+issue_up.issue.subject %>
+            </dt>
+            <dd>
+              <span class="description"><%= raw issue_up.issue.description %></span>
+            </dd>
+        <% end %>
+      <% end %>
+    </dl>
+  <% end %>
+</div>
+</div>

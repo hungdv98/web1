@@ -1,0 +1,9 @@
+//= require jquery-1.12.4
+//= require jquery_ujs
+//= require rails-ujs
+//= require ckeditor/init
+//= require turbolinks
+//= require_tree .
+//= require flash_timeout
+//= require bootstrap-datepicker
+//= require search_parent

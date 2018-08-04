@@ -1,0 +1,241 @@
+vi:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: ""
+      models:
+        project:
+          attributes: 
+            name:
+              taken: "%{model} đã được sử dụng "
+              blank: "%{model} không thể để trống"
+            description:
+              blank: "%{model} không thể để trống"
+        emoji:
+          attributes: 
+            code:
+              taken: "%{model} đã được sử dụng "
+              blank: "%{model} không thể để trống"
+            emo:
+              blank: "%{model} không thể để trống"
+        issue:
+          attributes: 
+            subject:
+              taken: "%{model} đã được sử dụng "
+              blank: "%{model} không thể để trống"
+        issue_template:
+          attributes: 
+            name:
+              taken: "%{model} đã được sử dụng "
+              blank: "%{model} không thể để trống"
+            description:
+              blank: "%{model} không thể để trống"
+        user:
+          attributes: 
+            login_name:
+              blank: "%{model} không thể để trống"
+            first_name:
+              blank: "%{model} không thể để trống"
+            last_name:
+              blank: "%{model} không thể để trống"
+            email:
+              invalid: "%{model} không đúng định dạng "
+              taken: "%{model} đã được sử dụng "
+              blank: "%{model} không thể để trống"
+            password:
+              blank: "%{model} không thể để trống"
+  task: "Task"
+  bug: "Bug"
+  name: "Tên"
+  active: "Kích hoạt"
+  block: "Khóa"
+  create: "Tạo mới"
+  submit: "Submit"
+  my_page: "Trang riêng"
+  project: "Dự án"
+  help: "Giúp đỡ"
+  user: "Quản lý User"
+  search: "Tìm"
+  jump_project: "Nhảy đến dự án..."
+  overview: "Tóm tắt"
+  create_issue: "Tạo vấn đề mới"
+  subject: "Tiêu đề"
+  add: "Thêm"
+  description: "Mô tả"
+  title: "Chủ đề"
+  preview: "Xem trước"
+  time: "Thời gian"
+  hour: "Giờ *"
+  btn_save_new: "Lưu và thêm mới"
+  show: "Hiển thị"
+  emoji: "Emojis"
+  id: "ID"
+  status: "Trạng thái"
+  destroy: "Hủy"
+  actions: "Hoạt động"
+  issue: "Vấn đề"
+  file: "Tập tin"
+  change_wiki: "Thay đổi wiki"
+  time_use: "Thời gian đã sử dụng"
+  apply: "Áp dụng"
+  sign_in: "Đăng nhập"
+  register: "Đăng ký"
+  account: "Tài khoản"
+  cr_success: "Thêm mới thành công!"
+  cr_danger: "Không thể thêm mới"
+  up_success: "Cập nhật thành công"
+  up_danger: "Cập nhật thất bại"
+  dt_success: "Xóa thành công"
+  dt_danger: "Xóa thất bại"
+  stblock: "Khóa"
+  stunblock: "Mở"
+  savechange: "Lưu thay đổi"
+  back: "Trở về"
+  yousure: "Bạn chắc không?"
+  edit: "Sửa"
+  delete: "Xóa"
+  btn_save: "Lưu"
+  controllers:
+    application: 
+      please_login: "Vui lòng hãy đăng nhập"
+    account_activation:
+      account_active: "Đã kích hoạt tài khoản"
+      link_valid: "Liên kết không hợp lệ"
+    password_reset:
+      email_send: "Đã gửi email"
+      email_not_found: "Không tìm thấy email"
+      not_empty: "không được để trống"
+      has_reset: "Mật khẩu đã được đặt lại."
+      has_expried: "Đặt lại mật khẩu đã hết hạn"
+    sessions:
+      not_found_account: "Không tìm thấy tài khoản này!"
+      not_active: "Bạn chưa được kích hoạt!"
+      wrong_user_pass: "Tên người dùng hoặc mật khẩu sai"
+      email_taken: "Email này có thể được thực hiện bởi một người nào đó?"
+    user:
+      check_email: "Vui lòng kiểm tra email của bạn"
+  models:
+    application:
+      sec: " giây"
+      minute: " phút"
+      hour: " giờ"
+      day: " ngày"
+      month: " tháng"
+      year: " năm"
+    picture:
+      img_error: "ít hơn 3MB"
+  views:
+    pagination:
+      first: "« Đầu"
+      last: "Cuối »"
+      previous: "‹ Trước"
+      next: "Sau ›"
+      truncate: "…"
+    emoji:
+      index:
+        new: "Thêm mới Emoji"
+        code: "Code"
+        emoji: "Emoji"
+        author: "Tác giả"
+    issue:
+      show:
+        add_time: "Thêm thời gian"
+        follow: "Theo dõi"
+        copy: "Sao chép"
+        add_by: "Thêm bởi"
+        before: "cách đây"
+        up_before: "Cập nhật cách đây"
+        link_pre: "<< Trước"
+        link_next: "Sau >>"
+        start: "Bắt đầu"
+        priority: "Mức ưu tiên"
+        end: "Hết hạn"
+        assign: "Phân công cho"
+        process: "Tiến độ"
+        time_think: "Thời gian ước lượng"
+        content_by: "Trích dẫn"
+        subtask: "Tác vụ con"
+        relate_issue: "Liên quan"
+        history: "Lược sử"
+        up_by: "Cập nhật bởi"
+        type_issue: "Loại vấn đề"
+        up_text: "cập nhật"
+        start_date: "Ngày bắt đầu"
+        end_date: "Ngày kết thúc"
+        estimate_time: "Thời gian ước tính"
+        percent_process: "Phần trăm tiến độ"
+      edit:
+        change_value: "Thay đổi thuộc tính"
+        out: "| Bỏ qua"
+      index:
+        filter: "Bộ lọc"
+        tracker: "Tracker"
+        add_filter: "Thêm bộ lọc"
+    my_page:
+      my_page: "Trang riêng"
+      issue_to_me: "Các vấn đề được giao cho tôi"
+      report_issue: "Vấn đề đã báo cáo"
+    password_reset:
+      edit:
+        reset_pass: "Đặt lại mật khẩu"
+        confirm: "Xác nhận"
+        up_pass: "Cập nhật mật khẩu"
+      new:
+        forgot_pass: "Quên mật khẩu"
+    projects:
+      edit:
+        edit_project: "Chỉnh sửa dự án"
+      index:
+        show_project_close: "Xem các dự án đã đóng"
+        all_issue: "Tất cả vấn đề"
+        sum_time: "Tổng thời gian sử dụng"
+        all_action: "Tất cả hoạt động"
+        project_of_you: "Dự án của bạn"
+      new:
+        new_project: "Dự án mới"
+      show:
+        details: "Chi tiết"
+        report: "Báo cáo"
+        open: "mở"
+        calendar: "Lịch"
+        chart: "Biểu đồ sự kiện"
+        member: "Thành viên"
+        manager: "Quản lý"
+        developer: "Lập trình viên"
+        degrade: "Degrade"
+    sessions:
+      login: "Đăng nhập"
+      pass: "Mật khẩu"
+      lost_pass: "Mất mật khẩu"
+      signin_google: "Đăng nhập bằng Google"
+      stay_logged_in: "Đã đăng nhập"
+    user:
+      edit:
+        title: "Sửa user"
+      index:
+        stt: "STT"
+        first_name: "First name"
+        last_name: "Last name"
+        email: "Email"
+        user_type: "Kiểu người dùng"
+        status: "Trạng thái"
+        created_at: "Created at"
+        updated_at: "Updated at"
+        active: "Kích hoạt"
+        user_total: "User/Total: "
+      new:
+        validate: "Phải dài ít nhất 6 ký tự."
+      show:
+        register_on: "Đắng ký vào"
+        last_connect: "Lần kết nối cuối cùng"
+        activity: "Hoạt động"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "No %{entry_name} found"
+          one: "Displaying <b>1</b> %{entry_name}"
+          other: "Displaying <b>all %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Displaying %{entry_name} <b>%{first} - %{last}</b> of <b>%{total}</b> in total"
+  

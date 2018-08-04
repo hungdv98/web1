@@ -1,0 +1,110 @@
+<div id="main" class="">
+  <div id="sidebar">
+    <h3><%= t "time" %></h3>
+    <p><span class="icon icon-time">16.00 giờ</span></p>
+    <p>
+      <a href="/projects/ruby-intern-redmine-cl/time_entries/new"><%= t "views.issue.show.add_time" %></a> |
+      <a href="/projects/ruby-intern-redmine-cl/time_entries"><%= t "views.projects.show.details" %></a> |
+      <a href="/projects/ruby-intern-redmine-cl/time_entries/report"><%= t "views.projects.show.report" %></a>
+    </p>
+  </div>
+
+  <div id="content">
+    <div class="contextual"></div>
+    <h2><%= t "overview" %></h2>
+    <div class="splitcontentleft">
+      <div class="wiki">
+        <% aEmo = Emoji.pluck(:code) %>
+        <% res = [] %>
+        <% setds = @project.description.split(" ") %>
+        <% if setds != nil %>
+          <% setds.each do |q| %>
+            <% if aEmo.include?(q) %>
+              <% getlink = Emoji.find_by(:code=>q.to_s) %>
+              <% if getlink != nil %>
+                <% res << ("<img src=\""+getlink.emo.url+"\", id=\"emo_id\">") %>
+              <% end %>
+            <% else %>
+              <% res << q %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% res.each do |q| %>
+          <%=raw q + " " %>
+        <% end %>
+      </div>
+    <div class="issues box">
+      <h3><%= t "issue" %></h3>
+      <ul>
+        <li>
+          <%= link_to t("task"), issues_path%>
+           : <% if @retTask == nil %>
+            0 <%= t "views.projects.show.open" %> / 0
+          <% else %>
+            <%= @retTask.length %> <%= t "views.projects.show.open" %>/<%= @retTask.length %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to t("bug"), issues_path%>
+           : <% if @retBug == nil %>
+            0 <%= t "views.projects.show.open" %> / 0
+          <% else %>
+            <%= @retBug.length %> <%= t "views.projects.show.open" %> /<%= @retBug.length %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to t("views.projects.show.degrade"), "#" %> :
+        0 <%= t "views.projects.show.open" %> / 0
+        </li>
+      </ul>
+
+      <% t = request.fullpath %>
+      <% g = t.split("/projects/") %>
+      <p>
+          <%= link_to t("views.projects.index.all_issue"), issues_path %>
+          <% if current_user.user_type == 0 %>
+            |<%= link_to "Edit", edit_project_path(g[1].to_i) %>
+          <% elsif @project.user_id == current_user.id and current_project != nil  %>
+            |<%= link_to "Edit", edit_project_path(current_project) %>
+          <% end %>
+        | <%= link_to t("views.projects.show.calendar"), "#" %>
+        | <%= link_to t("views.projects.show.chart"), "#" %>
+      </p>
+
+    </div>
+  </div>
+
+  <div class="splitcontentright">
+    <div class="members box">
+      <h3><%= t "views.projects.show.member" %></h3>
+      <h5><%= t "views.projects.show.manager" %>:
+        <%= link_to @project.user.login_name, user_path(@project.user.id) %>
+      </h5>
+      <h5><%= t "views.projects.show.developer" %>:
+        <% tmp = UserProject.joins(:user).joins(:project).where("project_id = ?", @project) %>
+        <% tmp.each do |t|%>
+          <%= link_to t.user.login_name, user_path(t.user.id) %>
+        <% end %>
+      </h5>
+    </div>
+  </div>
+
+  <div style="clear:both;"></div>
+  </div>
+</div>
+<style type="text/css">
+  #emo_id{
+    border-radius: 35px;
+    height: 35px;
+    width: 35px;
+  }
+</style>
+
+
+
+
+
+
+
+
+

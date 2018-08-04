@@ -1,0 +1,20 @@
+<div id="content">
+  <div id="activity">
+    <% @d.each do |day| %>
+      <h4><%= day %></h4>
+        <dl>
+          <% @all_hist.each do |q| %>
+            <dt class="issue-edit">
+              <% if q.created_at.strftime("%Y-%m-%d") == day %>
+                <span class="time"><%= q.created_at.strftime("%H:%M") %></span>
+                <%tmp = Issue.where("id=?", q.issue_id) %>
+                <a href="/issues/<%= q.issue_id %>"><%=tmp[0].type_issue%> #<%=tmp[0].id%> (<%= tmp[0].status %>): <%= tmp[0].subject %></a>
+                <br>
+                <% get_name = User.where("id=?", q.user_id)%>
+                &ensp;&ensp;&ensp;&ensp;<%=link_to get_name[0].login_name, user_path(tmp[0].user_id) %>
+              <% end %>
+          <% end %>
+        </dl>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,195 @@
+en:
+  task: "Task"
+  bug: "Bug"
+  name: "Name"
+  active: "Active"
+  block: "Block"
+  create: "Create"
+  submit: "Submit"
+  my_page: "My page"
+  project: "Project"
+  help: "Help"
+  user: "User management"
+  search: "Search"
+  jump_project: "Jump to the project..."
+  overview: "Overview"
+  create_issue: "Create new issue"
+  subject: "Subject"
+  add: "Add"
+  description: "Description"
+  title: "Subject"
+  preview: "Preview"
+  time: "Time"
+  hour: "Hour *"
+  btn_save_new: "Save & New"
+  show: "Show"
+  emoji: "Emojis"
+  id: "ID"
+  status: "Status"
+  destroy: "Destroy"
+  actions: "Action"
+  issue: "Issue"
+  file: "Files"
+  change_wiki: "Wiki changes"
+  time_use: "Time use"
+  apply: "Apply"
+  sign_in: "Sign in"
+  register: "Register"
+  account: "Account"
+  cr_success: "Create success!"
+  cr_danger: "Failed to create"
+  up_success: "Update success"
+  up_danger: "Update failed"
+  dt_success: "Delete success"
+  dt_danger: "Delete failed"
+  stblock: "Block"
+  stunblock: "Unblock"
+  savechange: "Save changes"
+  back: "Back"
+  yousure: "You sure?"
+  edit: "Edit"
+  delete: "Delete"
+  btn_save: "Save"
+  controllers:
+    application: 
+      please_login: "Please log in"
+    account_activation:
+      account_active: "Account activated"
+      link_valid: "Invalid link"
+    password_reset:
+      email_send: "Email sent"
+      email_not_found: "Email not found"
+      not_empty: "can't be empty"
+      has_reset: "Password has been reset."
+      has_expried: "Password reset has expired"
+    sessions:
+      not_found_account: "Not found this account!"
+      not_active: "You are not activated!"
+      wrong_user_pass: "Wrong username or password"
+      email_taken: "This email might be taken by someone?"
+    user:
+      check_email: "Please check your email"
+  models:
+    application:
+      sec: "sec"
+      minute: "minute"
+      hour: "hour"
+      day: "day"
+      month: "month"
+      year: "year"
+    picture:
+      img_error: "less than 3MB"
+  views:
+    pagination:
+      first: "« FIRST"
+      last: "LAST »"
+      previous: "‹ PREV"
+      next: "NEXT ›"
+      truncate: "…"
+    emoji:
+      index:
+        new: "New Emoji"
+        code: "Code"
+        emoji: "Emoji"
+        author: "Author"
+    issue:
+      show:
+        add_time: "Add time"
+        follow: "Follow"
+        copy: "Copy"
+        add_by: "Add by"
+        before: "ago"
+        up_before: "Updated before"
+        link_pre: "<< Before"
+        link_next: "Next >>"
+        start: "Start"
+        priority: "Priority"
+        end: "Expired"
+        assign: "Assignee"
+        process: "Progress"
+        time_think: "Estimated time"
+        content_by: "Quote"
+        subtask: "Subtasks"
+        relate_issue: "Involve"
+        history: "History"
+        up_by: "Update by"
+        type_issue: "Type issue"
+        up_text: "update"
+        start_date: "Start Date"
+        end_date: "End Date"
+        estimate_time: "Estimate Time"
+        percent_process: "Percent Progress"
+      edit:
+        change_value: "Change properties"
+        out: "| Revoke"
+      index:
+        filter: "Filter"
+        tracker: "Tracker"
+        add_filter: "Add filter"
+    my_page:
+      my_page: "My page"
+      issue_to_me: "Issues assigned to me"
+      report_issue: "Reported issues"
+    password_reset:
+      edit:
+        reset_pass: "Reset password"
+        confirm: "Confirmation"
+        up_pass: "Update password"
+      new:
+        forgot_pass: "Forgot password"
+    projects:
+      edit:
+        edit_project: "Edit Project"
+      index:
+        show_project_close: "View closed projects"
+        all_issue: "All Issues"
+        sum_time: "Total time spent"
+        all_action: "All activities"
+        project_of_you: "Your project"
+      new:
+        new_project: "New project"
+      show:
+        details: "Details"
+        report: "Report"
+        open: "open"
+        calendar: "Calendar"
+        chart: "Event graph"
+        member: "Member"
+        manager: "Manager"
+        developer: "Developer"
+        degrade: "Degrade"
+    sessions:
+      login: "Log in"
+      pass: "Password"
+      lost_pass: "Lost password"
+      signin_google: "Sign in with Google"
+      stay_logged_in: "Stay logged in"
+    user:
+      edit:
+        title: "Edit user"
+      index:
+        stt: "STT"
+        first_name: "First Name"
+        last_name: "Last Name"
+        email: "Email"
+        user_type: "User type"
+        status: "Status"
+        created_at: "Created at"
+        updated_at: "Updated at"
+        active: "Active"
+        user_total: "User/Total: "
+      new:
+        validate: "Must be at least 6 characters long."
+      show:
+        register_on: "Registered on"
+        last_connect: "Last connection"
+        activity: "Activity"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          zero: "No %{entry_name} found"
+          one: "Displaying <b>1</b> %{entry_name}"
+          other: "Displaying <b>all %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Displaying %{entry_name} <b>%{first} - %{last}</b> of <b>%{total}</b> in total"

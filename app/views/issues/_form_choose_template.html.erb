@@ -1,0 +1,12 @@
+<div id="form-tag-choose_issue" style="display: none;">
+  <%= form_tag choose_type_issue_issues_path, method: :get, remote: true do %>
+    <%= select_tag "choose_type_issue", options_for_select([['Task', '1'], ['Bug', '2']])%>
+    <%= submit_tag "Search", id: "search-key", style: "display: none;" %>
+  <% end %>
+</div>
+<div id="form-tag-choose_template" style="display: none;">
+  <%= form_tag choose_template_issues_path, method: :get, remote: true do %>
+    <%= select_tag "choose_template", options_for_select(IssueTemplate.where("type_template=?", 1).collect{ |o| [o.name, o.id] }), :include_blank => true %>
+    <%= submit_tag "Search", id: "choose-template", style: "display: none;" %>
+  <% end %>
+</div>

@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+<p>
+  <strong><%= t "views.emoji.index.code" %>:</strong>
+  <%= @emoji.code %>
+</p>
+<p>
+  <strong><%= t "status" %>:</strong>
+  <%= @emoji.status %>
+</p>
+<p>
+  <strong><%= t "emoji" %>:</strong>
+  <%= image_tag @emoji.emo.thumb.url if @emoji.emo? %>
+</p>
+<p>
+  <% tmp = User.where("id=?", @emoji.user_id) %>
+  <strong>Author:</strong>
+  <%= tmp[0].email %>
+</p>
+<% if (current_user.user_type == 0) or (current_user.id == @emoji.user_id) %>
+  <%= link_to t("edit"), edit_emoji_path(@emoji) %> |
+<% end %>
+<%= link_to t("back"), emojis_path %>

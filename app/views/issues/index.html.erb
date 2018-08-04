@@ -1,0 +1,224 @@
+<input name="utf8" type="hidden" value="✓">
+<div id="query_form_with_buttons" class="hide-when-print">
+  <input type="hidden" name="set_filter" id="set_filter" value="1">
+  <div id="query_form_content">
+    <fieldset id="filters" class="collapsible">
+      <legend id="issue-loc"><%= t "views.issue.index.filter" %></legend>
+      <div style="display: block;" id="issue-table">
+        <%= form_for issues_path, method: :get, :html => { id: "filter-issue" } do %>
+        <table style="width:100%">
+              <tr>
+                <td>
+                  <table id="filters-table">
+            <tr class="filter" id="tr_status_id" style="display:none;">
+              <td class="field" id="td_status_id" >
+                <%= check_box_tag "status" %>
+                <%= label_tag t "status" %>
+              </td>
+              <td class="operator" id="status-description" style="display:none;">
+                <%= select(:value_status, "name1", ['New', 'In Progress',
+                  'Resolved', 'Closed']) %>
+              </td>
+            </tr>
+            <tr class="filter" id="tr_assignee_id" style="display:none;" >
+              <td class="field" id="td_assignee_id" style="display:none;">
+                <%= check_box_tag "asignee" %>
+                <%= label_tag t "views.issue.show.assign" %>
+              </td>
+              <td class="operator asignee-child" style="display:none;">
+                <%= select(:select_content_assignee, "name2", ['is', 'is not']) %>
+              </td>
+              <td class="operator asignee-child" style="display:none;">
+                <%= select(:value_assignee, "name3",
+                  User.joins(:user_projects).where("project_id = ?", session[:project_id]).collect {|d| [d.email,d.id]} ) %>
+              </td>
+            </tr>
+            <tr class="filter" id="tr_prioriy_id" style="display:none;">
+              <td class="field" id="td_prioriy_id" style="display:none;">
+                <%= check_box_tag "priority" %>
+                <%= label_tag t "views.issue.show.priority" %>
+              </td>
+              <td class="operator priority-child" style="display:none;">
+                <%= select(:select_content_priority, "name4", ['is', 'is not']) %>
+              </td>
+              <td class="operator priority-child" style="display:none;">
+                <%= select(:value_priority, "name5", [['Low', 1], ['In Normal', 2], ['High', 3], ['Urgent', 4], ['Immediate', 5]]) %>
+              </td>
+            </tr>
+            <tr class="filter" id="tr_tracker_id" style="display:none;">
+              <td class="field" id="td_tracker_id" style="display:none;">
+                <%= check_box_tag "tracker" %>
+                <%= label_tag t "views.issue.index.tracker" %>
+              </td>
+              <td class="operator tracker-child" style="display:none;">
+                <%= select(:select_content_tracker, "name6", ['is', 'is not']) %>
+              </td>
+              <td class="operator tracker-child" style="display:none;">
+                <%= select(:value_tracker, "name7", [['Task', 1], ['Bug', 2]]) %>
+              </td>
+            </tr>
+          </table>
+                </td>
+                <td class="add-filter">
+                  <label for="add_filter_select"><%= t "views.issue.index.add_filter" %></label>
+                  <select id="add_filter_select"><option value="">&nbsp;</option>
+                    <option value="status_id"><%= t "status" %></option>
+                    <option value="tracker_id"><%= t "views.issue.index.tracker" %></option>
+                    <option value="assignee_id"><%= t "views.issue.show.assign" %></option>
+                    <option value="priority_id"><%= t "views.issue.show.priority" %></option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+        <% end %>
+        <input type="hidden" name="f[]" id="f_" value="">
+      </div>
+    </fieldset>
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#add_filter_select").change(function(){
+      a = $("#add_filter_select").find(':selected').text();
+      if(a=="Status" || a=="Trạng thái")
+      {
+        $("#tr_status_id").show();
+        $("#td_status_id").show();
+
+        this.value = '';
+      }
+      else if (a=="Tracker")
+      {
+        $("#tr_tracker_id").show();
+        $("#td_tracker_id").show();
+        this.value = '';
+      }
+      else if (a=="Assignee" || a=="Phân công cho")
+      {
+        $("#tr_assignee_id").show();
+        $("#td_assignee_id").show();
+        this.value = '';
+      }
+      else
+      {
+        $("#tr_prioriy_id").show();
+        $("#td_prioriy_id").show();
+        this.value = '';
+      }
+    });
+  })
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#status").click(function() {
+      $("#status-description").toggle();
+    });
+    $("#asignee").click(function() {
+      $(".asignee-child").toggle()
+    });
+    $("#priority").click(function() {
+      $(".priority-child").toggle()
+    });
+    $("#tracker").click(function() {
+      $(".tracker-child").toggle()
+    });
+  })
+</script>
+<div class="issue-index-link">
+  <%= link_to t("apply"), issues_path, class: "icon icon-checked", id: "btn-apdung" %>
+  <%#= link_to t("btn_save"), "#", class: "icon icon-save" %>
+  <% if current_user.user_type == 0%>
+    <%= link_to t("delete"),issues_path, data: { confirm: t("yousure") }, class: "icon icon-reload issue-delete", id: "btn-xoa-issue" %>
+  <% else %>
+    <%= link_to t("delete"), "", class: "icon icon-reload" %>
+  <% end %>
+</div>
+<%= form_tag destroy_multiple_issues_path, method: :delete, id: "delete-issue" do %>
+  <table class="tb-index">
+      <tr>
+        <th class="text-center" >index</th>
+        <th class="text-center" ><i class="fa fa-check"></i></th>
+        <th class="text-center" ><%= sortable ("id") %></th>
+        <th class="text-center" ><%= sortable ("project_id") %></th>
+        <th class="text-center" ><%= sortable ("type_issue") %></th>
+        <th class="text-center" ><%= sortable ("subject") %></th>
+        <th class="text-center" ><%= sortable ("status") %></th>
+        <th class="text-center" ><%= sortable ("priority") %></th>
+        <th class="text-center" ><%= sortable ("assignee") %></th>
+        <th class="text-center" ><%= sortable ("start_date") %></th>
+        <th class="text-center" ><%= sortable ("expired_date") %></th>
+        <th class="text-center" ><%= sortable ("estimate_time") %></th>
+        <th class="text-center" >
+          <%= sortable("percent_progress") %>
+        </th>
+        <th class="text-center" ><%= sortable("version") %></th>
+      </tr>
+      <% @issues.each_with_index do |item, index| %>
+        <tr class="ac-tr">
+          <td class="text-center issue-index" id="index-<%= item.id %>" >
+            <%= @index = create_index params[:page], index, 15 %>
+          </td>
+          <td class="text-center" ><%= check_box_tag "issues[]", item.id %></td>
+          <td class="text-center" id="id-issue-<%= item.id %>">
+            <%= link_to item.id, {controller: "issues", action: "show", id: item.id, index: @index} %>
+          </td>
+          <td class="text-center" >
+            <% if Project.find_by(id: item.project_id) != nil %>
+              <%= Project.find_by(id: item.project_id).name %>
+            <% end %>
+          </td>
+          <td class= "text-center">
+            <% b = Hash["Task", 1, "Bug", 2] %>
+            <%= b.key(item.type_issue) %>
+          </td>
+          <td class="text-center">
+            <%= link_to item.subject, {controller: "issues", action: "show", id: item.id, index: @index} %>
+          </td>
+          <td class="text-center">
+            <% b = Hash["Task", 1, "Bug", 2] %>
+            <%= b.key(item.type_issue) %>
+          </td>
+          <td class="text-center">
+            <% a = Hash["Low", 1, "In Normal", 2, "High", 3, "Urgent", 4, "Immediate", 5] %>
+            <%= a.key(item.priority) %>
+          </td>
+          <% if item.assignee == "" %>
+              <td class="text-center"><%= item.assignee %>
+          <% else %>
+            <td class="text-center"><%= User.find_by(id: item.assignee).email %>
+            </td>
+          <% end %>
+          <td class="text-center"><%= item.start_date %></td>
+          <td class="text-center"><%= item.expired_date %></td>
+          <td class="text-center"><%= item.estimate_time %> giờ</td>
+          <td class="text-center">
+            <%= progress_bar item.percent_progress[0,2].to_f/100, label: true,
+              style: 'min-width: 20px' %>
+          </td>
+          <td class="text-center"></td>
+        </tr>
+      <% end %>
+  </table>
+<% end %>
+<p id="page-index-show"><%= params[:index]%></p>
+<%= paginate @issues, theme: "twitter-bootstrap-3" %>
+<br/>
+(<%= @issues.size %>/<%= @count %>)
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#issue-table").hide();
+    $("#issue-loc").click(function(){
+      $("#issue-table").toggle();
+    });
+  })
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+  $('#btn-apdung').click(function() {
+    $( "#filter-issue" ).submit();
+  });
+  $('#btn-xoa-issue').click(function() {
+    $( "#delete-issue" ).submit();
+  });
+});
+</script>

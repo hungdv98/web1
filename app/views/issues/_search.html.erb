@@ -1,0 +1,14 @@
+<ul style="background-color: white; width:200px;">
+  <% if !@auto.nil?%>
+    <% @auto.each do |p| %>
+      <li><a id="<%= p.id %>">Task# <%= p.id %>-<%= p.subject %></a></li>
+      <script type="text/javascript">
+        $("#<%= p.id %>").click(function(){
+          $(".parent-task").val(<%= p.id %>);
+          $("#show-parent").hide();
+        })
+        $("#show-parent").show();
+      </script>
+    <% end %>
+  <% end %>
+</ul>

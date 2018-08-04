@@ -1,0 +1,49 @@
+<% @issues.ids.each_with_index do |item, index| %>
+  <% if item == @history.issue_id %>
+    <% @vt = index+1 %>
+  <% end %>
+<% end %>
+<div id="content">
+  <h2>#<%= @history.issue_id %></h2>
+  <p><%= t "views.issue.show.up_by" %> <%= link_to User.find_by(id: @history.user_id).email, user_path(@history.user_id) %> <%= t "views.issue.show.before" %> <%= link_to @update_day, actions_path %></p>
+  <div class="text-diff">
+  </div>
+  <p>
+    <%= link_to t("back"), {controller: "issues", action: "show", id: @history.issue_id, index: @vt} %>
+  </p>
+  <div id="truoc" style="display: none"><%= (@history.description.split("thay doi tu ")[1].split(" thanh")[0]).html_safe %></div>
+  <div id="sau" style="display: none"><%= (@history.description.split(" thanh ")[1]).html_safe %></div>
+  <div style="clear:both;"></div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    var a = $("#truoc p").text();
+    var c = a.trim().split(" ");
+    var b = $("#sau p").text();
+    var d = b.trim().split(" ");
+    var mang = []
+    var arr = b.trim().split(" ");
+    var obj = [];
+    for(var i=0; i<d.length;i++)
+    {
+      for(var j=0;j<c.length; j++)
+        if(d[i]==c[j])
+        {
+          obj.push(c[j]);
+          d.splice(i,1);
+        }
+
+    }
+    for(var k1=0; k1<arr.length; k1++)
+    {
+      $(".text-diff").append("<strong id='id_"+k1+"' style='background-color: green'>"+arr[k1]+" </strong>")
+      for(var k2=0;k2<obj.length;k2++)
+      {
+        if(arr[k1]==obj[k2])
+        {
+          $("#id_"+k1+"").css("background-color", "white");
+        }
+      }
+    }
+  })
+</script>

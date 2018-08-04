@@ -1,0 +1,102 @@
+<div id="main" class="nosidebar">
+  <div id="content">
+  <h2><%= t "views.projects.edit.edit_project" %></h2>
+  <%= form_for(@project) do |f| %>
+  <%= render "shared/error_messages", object: @project%>
+    <div class="box tabular">
+    <p><%= t "name" %><span class="required"> *</span>
+      <%= f.text_field :name, class: "form-control", size: "30x10" %>
+    </p>
+    <p><%= t "description" %><span class="required"> *</span>
+    <%#= f.cktext_area :description, rows: 10, class: "form-control", size: "30x20" %>
+      <%= f.text_area :description, id: "alltext" %>
+    </p>
+    <p>Manager<span class="required"> *</span>
+        <%= f.select(:user_id, User.all.collect {|d| [d.email,d.id]}, {:class => "some_class"} ) %>
+    </p>
+    <p>Emoji
+      <%= select_tag "Emoji", options_for_select(Emoji.all.collect{|e| [  e.emo, e.code] }),
+      {:class =>"select_combobox",
+        :include_blank => "",
+          :onchange => "addText(event)"
+          } %>
+    </p>
+      <script>
+        function addText(event) {
+            event.preventDefault();
+            var targ = event.target
+            document.getElementById("alltext").value += " " + targ.value ;
+        }
+      </script>
+    <p>Status<span class="required"> *</span>
+      <%= f.select :status, ["New", "In Progress", "Resolved"] %>
+    </p>
+    <p><%= t "views.issue.show.assign" %>:</p>
+ <div class="table-wrapper">
+    <table>
+      <% tmp = User.all.where("id != ? and user_type != ?", current_user.id,0)%>
+        <% tmp.each do |t|%>
+          <% @display.each do |d| %>
+            <% if UserProject.find_by(id: d ).user_id == t.id  %>
+             <div class="col-md-2 col-sm-2" >
+              <%= check_box_tag "qqq[]", t.id, true%> <%= t.login_name%>
+             </div>
+            <% end %>
+          <% end %>
+          <div class="col-md-2 col-sm-2" >
+            <%= check_box_tag "qqq[]", t.id%> <%= t.login_name%>
+          </div>
+        <% end %>
+    </table>
+  </div>
+<br><br>
+      <%= f.label :active, t("active") %>
+      <%= f.radio_button :active, "true", :checked => true %>
+      <%= f.label :active, t("block") %>
+      <%= f.radio_button :active, "false"%>
+<br><br>
+        <%= f.submit t("submit") %>  <%= link_to t("back"), projects_path %>
+      <% end %>
+
+<div style="clear:both;"></div>
+  </div>
+</div>
+
+<style type="text/css">
+  .table-wrapper
+{
+    margin-left: 170px;
+    border: 1px solid black;
+    width: 1100px;
+    height: 200px;
+    overflow: auto;
+}
+
+table
+{
+    border: 1px solid black;
+    margin-right: 20px;
+}
+
+.tabular label{
+  margin-left: 200px;
+  float: none;
+}
+
+</style>
+<script type="text/javascript">
+  var x = $('.col-md-2');
+  var y = $('input[name="qqq[]"]:checked');
+  var tmp = [];
+  for (i=0 ; i < y.length ; i++){
+    tmp.push(y[i].value);
+  }
+  for (i = 0 ; i < x.length ; i++){
+    for (j = 0 ; j < tmp.length; j++ ){
+      if ( (x[i].children[0].valueOf('input[name="qqq[]"]').value == tmp[j])
+        && (!x[i].children[0].valueOf('input[name"qqq[]"]').checked) ){
+          x[i].remove();
+      }
+    }
+  }
+</script>

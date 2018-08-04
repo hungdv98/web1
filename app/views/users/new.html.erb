@@ -1,0 +1,36 @@
+<div id="main" class="nosidebar">
+<div id="content">
+<h2><%= t "register" %> </h2>
+
+<%= form_for (@user) do |f| %>
+<%= render "shared/error_messages", object: @user%>
+<div class="box tabular">
+<p><label for="user_login"><%= t "views.sessions.login" %><span class="required"> *</span></label>
+<%= f.text_field :login_name, class: "form-control", size: "100" %>
+</p>
+
+<p><label for="user_password"><%= t "views.sessions.pass" %><span class="required"> *</span></label>
+<%= f.password_field :password, class: "form-control", size: "100" %>
+<em class="info"><%= t "views.user.new.validate" %></em>
+</p>
+
+<p><label for="user_password_confirmation"><%= t "views.password_reset.edit.confirm" %><span class="required"> *</span></label>
+<%= f.password_field :password_confirmation, class: "form-control", size: "100" %>
+</p>
+
+<p><label for="user_lastname"><%= t "views.user.index.firts_name" %><span class="required"> *</span></label>
+<%= f.text_field :first_name, class: "form-control", size: "100" %>
+</p>
+<p><label for="user_lastname"><%= t "views.user.index.last_name" %><span class="required"> *</span></label>
+<%= f.text_field :last_name, class: "form-control", size: "100" %>
+
+<p><label for="user_mail"><%= t "views.user.index.email" %><span class="required"> *</span></label>
+<%= f.text_field :email, class: "form-control", size: "100" %>
+</p>
+</div>
+<%= f.submit t("submit") %>
+<% end %>
+
+<div style="clear:both;"></div>
+</div>
+</div>

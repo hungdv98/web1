@@ -1,0 +1,56 @@
+<div class="user-management">
+  <%= link_to "Add", new_issue_template_path, class: "icon icon-add user-management-link" %>
+  <%#= form_for issue_templates_path, method: :get, class: "search" do %>
+    <%#= text_field_tag :search, params[:search] %>
+    <%#= submit_tag "Search" %>
+  <%# end %>
+</div>
+<table class="tb-index">
+  <tr>
+    <th class="text-center" ><%= t "views.user.index.stt" %></th>
+    <th class="text-center" ><%= t "name" %></th>
+    <th class="text-center" ><%= t "type_template" %></th>
+    <th class="text-center" ><%= t "description" %></th>
+    <th class="text-center" ><%= t "views.user.index.created_at" %></th>
+    <th class="text-center" ><%= t "views.user.index.updated_at" %></th>
+    <% if current_user.user_type==0%>
+      <th class="text-center" ><%= t "views.user.index.action" %></th>
+    <% end %>
+  </tr>
+  <% @templates.each_with_index do |item| %>
+  <tr>
+    <td class="text-center" ><%= item.id %></td>
+    <td class="text-center" ><%= item.name%></td>
+    <td class="text-center"><%= item.type_template %></td>
+    <td class="text-center">
+      <button id="myBtn1" class="click_<%= item.id %>">View</button>
+    </td>
+    <td class="text-center"><%= item.created_at.strftime("%d-%m-%Y") %></td>
+    <td class="text-center"><%= item.updated_at.strftime("%d-%m-%Y") %></td>
+    <% if current_user.user_type==0%>
+      <td class="text-center">
+        <%= link_to t("edit"), edit_issue_template_path(item), class: "icon icon-edit user-management-link" %>
+          <%= link_to t("delete"), item,
+            class: "icon icon-edit user-management-link", method: :delete,
+            data: { confirm: t("yousure") } %>
+      </td>
+    <% end %>
+    <div id="mymodal1" class="modal1 modal_<%= item.id %>">
+      <div class="modal1-content">
+        <span class="close1">&times;</span>
+        <p><%= item.description.html_safe %></p>
+      </div>
+    </div>
+  </tr>
+  <script type="text/javascript">
+    var x = "<%= item.id %>"
+      $(".click_<%= item.id %>").click(function (){
+        $(".modal_<%= item.id %>").show();
+      })
+      $(".close1").click(function (){
+        $(".modal_<%= item.id %>").hide();
+      })
+  </script>
+  <% end %>
+</table>
+<%= paginate @templates, theme: "twitter-bootstrap-3" %>

@@ -1,0 +1,16 @@
+<% if object.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-danger">
+      <% if params[:controller] == "user" %>
+        <%= t "err_form" %> <%= pluralize(@user.errors.count, "error") %>
+      <% elsif params[:controller] == "project" %>
+        <%= t "err_form" %> <%= pluralize(@project.errors.count, "error") %>
+      <% end %>
+    </div>
+    <ul>
+    <% object.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>

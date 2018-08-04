@@ -1,0 +1,32 @@
+<div id="content">
+  <h2><%= t "time" %></h2>
+  <%= form_tag add_time_issues_path, method: :put do |f| %>
+    <div class="box tabular">
+      <p>
+        <label for="time_entry_issue_id"><%= t "issue" %></label>
+        <span class="icon-search"><%= text_field_tag :id, @issue.id, size: "8",
+          style: "font-size:16px;padding-left: 25px;" %></span>
+        <span id="time_entry_issue"><%= @issue.type_issue %> #<%= @issue.id %></span>
+      </p>
+      <p>
+        <%= label_tag t "hour" %>
+        <%= text_field_tag :estimate_time, "", size: "6", class: "addtime" %>
+      </p>
+    </div>
+    <%= submit_tag t("btn_save"), class: "button-save link-save"%>
+    <%= submit_tag t("btn_save_new"), class: "button-save link-save"%>
+  <% end %>
+  <div style="clear:both;"></div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".link-save").hover(function() {
+      var value = $('.addtime').val()
+      var regex = new RegExp(/^[0-9]+\.?[0]{0,2}$/);
+      if(value.match(regex) && value.match(regex)>0 ){}
+      else{
+        alert("Data invalid");
+      }
+    });
+  });
+</script>

@@ -1,0 +1,12 @@
+/*
+ *= require_tree .
+ *= require_self
+ *= require font-awesome
+ *= require bootstrap-datepicker
+ *= require jquery-ui	
+ */
+ .ui-autocomplete{
+ 	height: 220px;
+ 	overflow-y: scroll;
+ 	overflow-x: hidden;
+ }

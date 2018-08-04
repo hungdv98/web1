@@ -1,0 +1,78 @@
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<div id="main" class="nosidebar">
+  <div id="content">
+  <h2><%= t "views.projects.new.new_project" %> </h2>
+  <%= form_for(@project) do |f| %>
+    <%= render "shared/error_messages", object: @project%>
+    <div class="box tabular">
+      <p><%= t "name" %><span class="required"> *</span>
+        <%= f.text_field :name, class: "form-control", size: "30x10" %>
+      </p>
+  <!--     <p>Description<span class="required"> *</span>
+        <%#= f.cktext_area :description, rows: 10, class: "form-control", size: "30x20", id:"data" %>
+      </p>
+ -->
+      <p><%= t "description" %><span class="required"> *</span>
+        <%= f.text_area :description, id: "alltext" %>
+       <!--  <textarea id="alltext"></textarea> -->
+      </p>
+
+      <p>Manager<span class="required"> *</span>
+        <%= f.select(:user_id, User.all.collect {|d| [d.login_name,d.id]}, {:class => "some_class"} ) %>
+      </p>
+
+      <p>Emoji
+        <%= select_tag "Emoji", options_for_select(Emoji.all.collect{|e| [  e.emo, e.code] }),
+        {:class =>"select_combobox",
+          :include_blank => "",
+            :onchange => "addText(event)"
+            } %>
+      </p>
+
+      <script>
+        function addText(event) {
+            event.preventDefault();
+            var targ = event.target
+            document.getElementById("alltext").value += " " + targ.value ;
+        }
+      </script>
+
+
+      <p><%= t "status" %><span class="required"> *</span>
+        <%= f.select :status, ["New", "In Progress", "Resolved"] %>
+      </p>
+
+      <p><%= t "views.issue.show.assign" %>:</p>
+      <div class="table-wrapper">
+        <table>
+          <% tmp = User.all.where("id != ? ", current_user.id)%>
+            <% tmp.each_with_index do |t, i|%>
+              <div class="col-md-2 col-sm-2">
+                <%= check_box_tag "check_user[]", t.id%> <%= t.login_name%>
+              </div>
+            <% end %>
+        </table>
+      </div>
+    <%= f.submit t("submit") %>  <%= link_to t("back"), projects_path %>
+  <% end %>
+
+  <div style="clear:both;"></div>
+  </div>
+</div>
+
+<style type="text/css">
+  .table-wrapper
+{
+    margin-left: 170px;
+    border: 1px solid black;
+    width: 1100px;
+    height: 200px;
+    overflow: auto;
+}
+
+table
+{
+    border: 1px solid black;
+    margin-right: 20px;
+}
+</style>

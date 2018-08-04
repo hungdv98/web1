@@ -1,0 +1,2 @@
+<%=select_tag "textcolor1",
+  options_for_select(@template.collect{ |o| [o.name,o.id] }), :include_blank => true %>

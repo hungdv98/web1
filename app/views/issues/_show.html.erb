@@ -1,0 +1,281 @@
+<div class="row">
+<h2 class="col-md-2">Task #<%= @issue.id %></h2>
+<div class="issue-management col-md-10">
+  <%= link_to t("edit"), edit_issue_path(@issue), class: "icon icon-edit issue-management-link" %>
+  <%= link_to t("views.issue.show.add_time"), edit_add_time_path(@issue),
+    class: "icon icon-time-add issue-management-link" %>
+  <%#= link_to t("views.issue.show.follow"), "#",
+    class: "icon icon-fav-off issue-management-link" %>
+  <%#= link_to t("views.issue.show.copy"), "#", class: "icon icon-copy issue-management-link" %>
+</div>
+<hr/>
+</div>
+<div class="issue tracker-2 status-2 priority-3 priority-high3 details">
+  <div class="col-md-8">
+    <img default="default" rating="PG" alt="" title="" class="gravatar"
+      ssl="false" src="" width="50" height="50">
+    <% if @issue.parent_id!="" %>
+      <p><%= @issue.parent_id %></p>
+    <% end %>
+    <div class="subject">
+      <div>
+        <b><%= @issue.subject %></b>
+      </div>
+    </div>
+    <p class="author">
+      <%= t "views.issue.show.add_by" %><%= link_to User.find_by(id: @issue.user_id).email, "#",
+        class: "user active" %> <%= t "views.issue.show.before" %> <%= link_to @create_day, "#" %>.
+      <%= t "views.issue.show.up_before" %> <%= link_to @update_day, "#" %>.
+    </p>
+  </div>
+  <style type="text/css">
+    .link-to-css-disable{
+      color: gray;
+    }
+  </style>
+  <div class="next-prev-links contextual issue-management col-md-4">
+    <% if params[:index]!="1" %>
+      <%= link_to t("views.issue.show.link_pre"), {controller: "issues", action: "show", id: @id_pre, index: params[:index].to_i-1}, class: "move-position" %>
+    <% end %>
+     |
+    <span class="position"><%= params[:index] %>/<%= @issues.count %></span> |
+    <% if params[:index].to_i != @issues.count %>
+      <%= link_to t("views.issue.show.link_next"), {controller: "issues", action: "show", id: @id_next, index: params[:index].to_i+1}, class: "move-position" %>
+    <% end %>
+  </div>
+
+  <table class="attributes">
+    <tbody>
+      <tr>
+        <th class="status"><%= t "status" %>:</th>
+        <td class="status"><%= @issue.status %></td>
+        <th><%= t "views.issue.show.start" %>:</th>
+        <th><%= @issue.start_date %></td>
+      </tr>
+      <tr>
+        <th class="priority"><%= t "views.issue.show.priority" %>:</th>
+        <td class="priority"><%= @issue.priority %></td>
+        <th class="due-date"><%= t "views.issue.show.end" %>:</th>
+        <td class="due-date"><%= @issue.expired_date %></td>
+      </tr>
+      <tr>
+        <th class="assigned-to"><%= t "views.issue.show.assign" %>:</th>
+        <td class="assigned-to"><img default="default" rating="PG" alt=""
+          title="" class="gravatar" ssl="false" src="" width="14" height="14">
+          <a class="user active" href="http://redmine.relipasoft.com/users/72">
+        <% if @issue.assignee == "" %>
+          <%= @issue.assignee %>
+        <% else %>
+          <%=link_to User.find_by(id: @issue.assignee).login_name ,
+            user_path(@issue.assignee)%></td>
+        <% end %>
+        <th><%= t "views.issue.show.process" %>:</th>
+        <td>
+          <%= progress_bar @issue.percent_progress[0,2].to_f/100, label: true,
+            style: 'width: 200px' %>
+        </td>
+      </tr>
+      <tr>
+        <th class="category"><%= t "title" %>:</th>
+        <td class="category"><%= @issue.subject %></td>
+        <th class="estimated-hours"><%= t "views.issue.show.time_think" %>:</th>
+        <td class="estimated-hours"><%= @issue.estimate_time %> <%= t "hour" %></td>
+      </tr>
+      <tr>
+        <th class="fixed-version">Phiên bản:</th>
+        <td class="fixed-version">-</td>
+        <th class="spent-time"><%= t "time" %>:</th>
+        <td class="spent-time">-</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div class="description">
+    <div class="col-md-10">
+      <p><strong><%= t "description" %></strong></p>
+      <div class="wiki">
+        <%= raw @issue.description %>
+      </div>
+      <% if @issue.pictures? %>
+        <%  @issue.pictures.each do |t|%>
+          <%= image_tag t, :height => 100, :width => 200 %>
+          <%= link_to "Detail", t.url %>
+          <%= link_to "Delete", "#"%>
+        <% end %>
+      <% end %>
+    </div>
+    <p  class= "icon icon-comment issue-management col-md-2 trich-dan"
+      style="color: #446E9B;"><%= t "views.issue.show.content_by" %></p>
+  </div>
+  <hr>
+  <div id="issue_tree">
+    <p class="col-md-10"><strong><%= t "views.issue.show.subtask" %></strong></p>
+    <%= link_to "Thêm", {controller: "issues", action: "new", parent: @issue.id}, class: "issue-add col-md-2" %>
+    <% @x.each_with_index do |child, index|  %>
+        <% x = Issue.find_by id: child %>
+        <% @issues.ids.each_with_index do |item, index| %>
+          <% if item == x.id %>
+            <% @vt1 = index+1 %>
+          <% end %>
+        <% end %>
+        <table class="list issues">
+          <tr>
+            <td class="subject" style="width: 50%">
+              <%= link_to "#{x.type_issue} ##{x.id}", {controller: "issues", action: "show", id: x.id, index: @vt1} %>: <%= x.subject %>
+            </td>
+            <td class="status"><%= x.status %></td>
+            <td class="start_date"><%= x.start_date %></td>
+            <td class="due_date">
+              <%= progress_bar x.percent_progress[0,2].to_f/100, label: true,
+                style: 'min-width: 20px' %>
+            </td>
+            <td></td>
+          </tr>
+
+        </table>
+    <% end %>
+  </div>
+  <hr />
+<div id="relations">
+  <div class="contextual">
+    <p class="col-md-10"><strong><%= t "views.issue.show.relate_issue" %></strong></p>
+    <a class="issue-add col-md-2" >Add</a>
+    <p id="show-issue-relationship" style="display: block !important;">
+      <% IssueRelationship.where("issue_id=?",@issue.id).each do |p| %>
+        <% x = Issue.where("id=?", p.issue_relation) %>
+        <% a = Hash["Related to", 0, "Duplicates", 1, "Blocks", 2, "Precedes", 3] %>
+        <table class="list issues">
+          <td class="subject" style="width: 50%">
+            <%= a.key(p.type_relationship) %> <%= Project.where("id=?", @issue.project_id).name %> - <%= link_to "#{x[0].type_issue} ##{x[0].id}", issue_path(x[0].id) %>: <%= x[0].subject %>
+          </td>
+          <td class="status"><%= x[0].status %></td>
+          <td class="start_date"><%= x[0].start_date %></td>
+          <td class="due_date"></td>
+          <td class="buttons">
+            <%= link_to p, class: "delete-issue-relation",remote: true, method: :delete, data: { confirm: t("yousure") } do %>
+              <%= image_tag("link_break") %>
+            <% end %>
+          </td>
+          </tr>
+        </table>
+      <% end %>
+    </p>
+  </div>
+  <div class="form-add-parent-task" style="display: block;" >
+    <%= render :file => 'issue_relationships/new' %>
+    <div class="col-md-2" id="form-tag-seach-parent" style="display: none;">
+      <%= form_tag search_issues_path, method: :get, remote: true, id: "searh_from_relation" do %>
+        <span class="icon-search">
+        <%= text_field_tag :search, "", size:25, autocomplete: :off, style: "padding-left: 25px;" %>
+        <%= hidden_field_tag :current_issue, @issue.id %>
+        <%= submit_tag "Search", id: "search-key" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<hr />
+<div id="history">
+  <h3><%= t "views.issue.show.history" %></h3>
+  <% unless @histories.nil?  %>
+    <% @histories.each_with_index do |a, index| %>
+      <div id="change-12865" class="journal has-details">
+        <div id="note-1">
+          <h4><a>
+            <%= t "views.issue.show.up_by" %> <%= link_to User.find_by(id: a.user_id).email, user_path(a.user_id) %> <%= t "views.issue.show.before" %>
+              <%= link_to a.distince_date(a.created_at), actions_path %></a>
+              <strong class="journal-link">#<%= create_index params[:page], index, 15 %></strong>
+          </h4>
+          <ul class="details">
+            <% if !a.type_issue.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.type_issue" %></strong> <%= a.type_issue %>
+              </li>
+            <% end %>
+            <% if !a.subject.nil? %>
+              <li>
+                <strong><%= t "subject" %> </strong> <%= a.subject %>
+              </li>
+            <% end %>
+            <% if !a.description.nil? %>
+              <li>
+                <strong><%= t "description" %> </strong> <%= t "views.issue.show.up_text" %> (<%= link_to "diff", show_description_path(a.id) %>)
+            <% end %>
+            <% if !a.status.nil? %>
+              <li>
+                <strong><%= t "status" %> </strong> <%= a.status %>
+              </li>
+            <% end %>
+            <% if !a.priority.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.priority" %> </strong> <%= a.priority %>
+              </li>
+            <% end %>
+            <% if !a.assignee.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.assign" %> </strong> <%= a.assignee %>
+              </li>
+            <% end %>
+            <% if !a.start_date.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.start_date" %></strong> <%= a.start_date %>
+              </li>
+            <% end %>
+            <% if !a.expired_date.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.end_date" %> </strong> <%= a.expired_date %>
+              </li>
+            <% end %>
+            <% if !a.estimate_time.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.estimate_time" %> </strong> <%= a.estimate_time %>
+              </li>
+            <% end %>
+            <% if !a.percent_progress.nil? %>
+              <li>
+                <strong><%= t "views.issue.show.percent_process" %> </strong> <%= a.percent_progress %>
+              </li>
+            <% end %>
+            <% if !a.parent_id.nil? %>
+              <li>
+                <strong>Parent task </strong> <%= a.parent_id %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+    <%= paginate @histories %>
+  <% end %>
+</div>
+<div style="clear: both;"></div>
+<div class="contextual">
+  <%= link_to t("edit"), edit_issue_path(@issue), class: "icon icon-edit issue-management-link" %>
+  <%= link_to t("views.issue.show.add_time"), edit_add_time_path(@issue),
+    class: "icon icon-time-add issue-management-link" %>
+  <%#= link_to t("views.issue.show.follow"), "#",
+    class: "icon icon-fav-off issue-management-link" %>
+  <%#= link_to t("views.issue.show.copy"), "#", class: "icon icon-copy issue-management-link" %>
+</div>
+<div style="clear: both;"></div>
+<div id="context-menu" style="display:none;"></div>
+<div style="clear:both;"></div>
+<script type="text/javascript">
+  $(function() {
+    $(".parent-task").mouseout(function() {
+      var x = $(".parent-task").val();
+      // if(x!=<%= @issue.id %>)
+      // {
+        $("#search").val(x);
+        if(x.length>0)
+        {
+          $("#searh_from_relation").submit();
+        }
+    })
+  });
+</script>
+<script type="text/javascript">
+  $(".move-position").click(function() {
+    location.reload();
+  })
+</script>
+

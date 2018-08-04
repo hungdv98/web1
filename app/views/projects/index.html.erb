@@ -1,0 +1,109 @@
+<% if current_user.user_type == 0 %>
+  <div class="user-management">
+    <b><%=  "Project/Total " %></b><%= @project.size %>/<%= @count %>
+    <%= link_to t("create"), new_project_path, class: "icon icon-add user-management-link" %>
+    <%= form_for projects_path, method: :get, class: "search" do %>
+      <%= text_field_tag :search, params[:search] %>
+      <%= submit_tag t("search") %>
+    <% end %>
+  </div>
+  <table class="tb-index">
+      <tr>
+        <th class="text-center" ><%= sortable ("id") %></th>
+        <th class="text-center" ><%= sortable ("name") %></th>
+        <th class="text-center" ><%= sortable("description") %></th>
+        <th class="text-center" ><%= sortable ("status") %></th>
+        <th class="text-center" ><%= sortable ("Owner")%></th>
+        <th class="text-center" ><%= sortable ("Member")%></th>
+        <th class="text-center" ><%= sortable("created_at") %></th>
+        <th class="text-center" ><%= sortable("updated_at") %></th>
+        <th class="text-center" ><%= sortable("active") %> </th>
+        <th class="text-center" ><%= t "views.user.index.action" %></th>
+      </tr>
+      <% @project.each_with_index do |item| %>
+      <tr>
+        <td class="text-center" ><%= item.id %></td>
+        <td class= "text-center"><%= link_to item.name, project_path(item)%></td>
+        <td class="text-center" id="descript"><%= item.description %></td>
+        <td class="text-center"><%= item.status %></td>
+
+        <% if item.user_id != nil%>
+          <td class="text-center"><%= link_to User.find_by(id: item.user_id).login_name,
+          user_path(User.find_by(id: item.user_id)) %></td>
+        <% else %>
+          <td class="text-center"><%= item.user_id %></td>
+        <%end%>
+        <td class="text-center">
+          <% tmp = UserProject.joins(:user).joins(:project).where("project_id = ?", item.id) %>
+          <% tmp.each do |t|%>
+            <%= link_to t.user.login_name, user_path(t.user.id) %>
+          <% end %>
+        </td>
+        <td class="text-center"><%= item.created_at.strftime("%d-%m-%Y") %></td>
+        <td class="text-center"><%= item.updated_at.strftime("%d-%m-%Y") %></td>
+        <td class="text-center"><%= item.active %></td>
+        <td class="text-center">
+          <%= link_to t("edit"), edit_project_path(item), class: "icon icon-edit user-management-link" %>
+            <%= link_to t("delete"), item, class: "icon icon-edit user-management-link", method: :delete, data: { confirm: t("yousure") } %>
+        </td>
+      </tr>
+      <% end %>
+  </table>
+  <%= paginate @project, theme: "twitter-bootstrap-3" %>
+
+  <style type="text/css">
+    #descript{
+      max-width: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  </style>
+
+<% else %>
+
+  <div id="main" class="">
+    <div id="sidebar">
+      <form action="/projects" accept-charset="UTF-8" method="get"><input name="utf8" value="✓" type="hidden">
+        <h3><%= t "project" %></h3>
+        <label for="closed">
+          <input name="closed" id="closed" value="1" type="checkbox"> <%= t "views.projects.index.show_project_close" %></label>
+        <p>
+          <input value="Áp dụng" class="button-small" type="submit">
+        </p>
+      </form>
+    </div>
+
+    <div id="content">
+
+    <div class="contextual">
+    <a href="#"><%= t "views.projects.index.all_issue" %></a> | <a href="#"><%= t "views.projects.index.sum_time" %></a> | <a href="#"><%= t "views.projects.index.all_action" %></a>
+    </div>
+    <h2><%= t "project" %></h2>
+    <div id="projects-index">
+      <ul class="projects root">
+       <li class="root">
+          <div class="root">
+            <% @list_assiged.each do |t| %>
+              <% findPrj = Project.find_by(:id => t.project_id) %>
+              <h1>
+                <%= link_to findPrj.name, project_path(findPrj) %>
+              </h1>
+              <div class="wiki description">
+                <h2>
+                  <%= findPrj.description %>
+                </h2>
+              </div>
+            <% end %>
+          </div>
+
+        </li>
+      </ul>
+    </div>
+    <p style="text-align:right;">
+    <span class="my-project"><%= t "views.projects.index.project_of_you" %></span>
+    </p>
+    <div style="clear:both;"></div>
+    </div>
+  </div>
+<% end %>

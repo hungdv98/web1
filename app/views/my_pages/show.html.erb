@@ -1,0 +1,79 @@
+<h2><%= t "views.issue.my_page.my_page" %></h2>
+<hr style="margin-left: 0" />
+<div id="list-left" class="splitcontentleft">
+  <div class="mypage-box">
+    <h3>
+      <%= link_to t("views.my_page.issue_to_me"), issues_path %>(<%= @issue.count %>)
+    </h3>
+    <hr style="margin-left: 0" />
+    <table style="width: 100% !important">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th><%= t "projetc" %></th>
+          <th><%= t "views.issue.index.tracker" %></th>
+          <th><%= t "subject" %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @issue.each do |issue|%>
+          <% @issues.ids.each_with_index do |item, index| %>
+            <% if item == issue.id %>
+              <% @vt = index+1 %>
+            <% end %>
+          <% end %>
+          <tr>
+            <td class="id">
+              <%= link_to issue.id, issues_path %>
+            </td>
+            <td class="project">
+              <%= link_to issue.project.name, {controller: "issues", action: "show", id: issue.id, index: @vt} %>
+            </td>
+            <td class="tracker"><%= issue.type_issue %></td>
+            <td class="subject">
+              <%= link_to issue.subject, {controller: "issues", action: "show", id: issue.id, index: @vt} %> (<%= issue.status %>)
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="list-right" class="splitcontentright">
+  <div class="mypage-box">
+    <h3>
+      <%= link_to t("views.my_page.report_issue"), issues_path %>
+      (<%= @issue_add.count %>)
+    </h3>
+    <hr style="margin-left: 0" />
+      <table style="width: 100% !important">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th><%= t "project" %></th>
+            <th><%= t "views.issue.index.tracker" %></th>
+            <th><%= t "subject" %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @issue_add.each do |issue|%>
+            <% @issues.ids.each_with_index do |item, index| %>
+              <% if item == issue.id %>
+                <% @vt = index+1 %>
+              <% end %>
+            <% end %>
+            <tr>
+              <td class="id">
+                <%= link_to issue.id, issues_path %>
+              </td>
+              <td class="project"><%= link_to issue.project.name, {controller: "issues", action: "show", id: issue.id, index: @vt} %></td>
+              <td class="tracker"><%= issue.type_issue %></td>
+              <td class="subject">
+                <%= link_to issue.subject, {controller: "issues", action: "show", id: issue.id, index: @vt} %> (<%= issue.status %>)
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+</div>

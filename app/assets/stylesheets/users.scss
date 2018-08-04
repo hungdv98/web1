@@ -1,0 +1,21 @@
+.user-management{
+	padding: 2% 0;
+    text-align: right;
+}
+.user-management-link{
+	margin: 0 2%;
+}
+.tb-index{
+	width: 100% !important;
+}
+.tb-index th, .tb-index td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.tb-index tr:nth-child(even){background-color: #f2f2f2}
+.count-user{
+    text-align: left !important;
+}

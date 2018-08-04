@@ -1,0 +1,53 @@
+<div class="user-management">
+  <b><%= t "views.user.index.user_total" %></b><%= @users.size %>/<%= @count %>
+  <%= link_to "Add", new_user_path, class: "icon icon-add user-management-link" %>
+  <%= form_for users_path, method: :get, class: "search" do %>
+    <%= text_field_tag :search, params[:search] %>
+    <%= submit_tag "Search" %>
+  <% end %>
+</div>
+<table class="tb-index">
+    <tr>
+      <th class="text-center" ><%= t "views.user.index.stt" %></th>
+      <th class="text-center" ><%= "Login name" %></th>
+      <th class="text-center" ><%= t "views.user.index.first_name" %></th>
+      <th class="text-center" ><%= t "views.user.index.last_name" %></th>
+      <th class="text-center" ><%= t "views.user.index.email" %></th>
+      <th class="text-center" ><%= t "views.user.index.user_type" %></th>
+      <th class="text-center" ><%= t "views.user.index.created_at" %></th>
+      <th class="text-center" ><%= t "views.user.index.updated_at" %></th>
+      <th class="text-center" ><%= t "views.user.index.active" %></th>
+      <th class="text-center" ><%= t "views.user.index.action" %></th>
+    </tr>
+
+    <% @users.each_with_index do |item| %>
+    <tr>
+      <td class="text-center" ><%= item.id %></td>
+      <td class="text-center" ><%= item.login_name%></td>
+      <td class="text-center"><%= item.first_name %></td>
+      <td class="text-center"><%= item.last_name %></td>
+      <td class="text-center"><%= link_to item.email, user_path(item) %></td>
+      <td class="text-center"><%= item.user_type %></td>
+      <td class="text-center"><%= item.created_at.strftime("%d-%m-%Y") %></td>
+      <td class="text-center"><%= item.updated_at.strftime("%d-%m-%Y") %></td>
+      <% if item.user_type==0 %>
+        <td class="text-center">
+          <%= link_to (item.status ? "UnBlock" : "Block"), "",
+            class: "btn btn-info" %>
+        </td>
+      <% elsif item.status==true %>
+        <td class="text-center"><%= link_to (item.status ? "UnBlock" : "Block"), block_user_path(item), class: "btn btn-info" %></td>
+      <% else %>
+        <td class="text-center"><%= link_to (item.status ? "UnBlock" : "Block"), block_user_path(item), class: "btn btn-danger" %></td>
+      <% end %>
+      <td class="text-center">
+
+        <%= link_to t("edit"), edit_user_path(item), class: "icon icon-edit user-management-link" %>
+        <% if item.user_type!=0%>
+          <%#= link_to t("delete"), item, class: "icon icon-edit user-management-link", method: :delete, data: { confirm: t("yousure") } %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+</table>
+<%= paginate @users, theme: "twitter-bootstrap-3" %>

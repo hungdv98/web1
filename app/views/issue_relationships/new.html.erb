@@ -1,0 +1,34 @@
+<%= form_for @issue_relationship do |f| %>
+  <p><%= render "shared/error_messages", object: f.object %></p>
+  <br/>
+  <p class="col-md-12" id="form-add-issue" style="display: none;">
+    <%= f.select :type_relationship, [['Related to', 0], ['Duplicates', 1], ['Blocks', 2], ['Precedes', 3]]%>
+    <%= hidden_field_tag :issue_id, @issue.id %>
+    <%= hidden_field_tag :project_id, @issue.project_id %>
+    Issue #<span class="icon-search"><%= f.text_field :issue_relation, class: "parent-task", style: "padding-left: 2em; position: relative;z-index:10" %>
+    <%= f.submit "Add", class: "click-add-parent", method: :get, remote: true, style: "" %>
+    <%= link_to "Cancel", "", class: "btn-cancel" %>
+    <div id="show-parent" style="margin: 4em 10em; position: absolute; z-index: 1"></div>
+  </p>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".issue-add").click(function(){
+      $("#form-add-issue").toggle();
+    })
+    $(".btn-cancel").click(function(){
+      $("#form-add-issue").hide();
+      $(".issue-add").focus();
+    })
+    $(".click-add-parent").click(function() {
+      $.ajax({
+          type: "get",
+          url: window.location.href ,
+          data: "",
+          success: function() {
+              location.reload();
+          }
+      });
+    })
+  })
+</script>

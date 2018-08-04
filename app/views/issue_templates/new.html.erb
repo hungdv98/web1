@@ -1,0 +1,19 @@
+<div id="all_attributes">
+  <h2><%= t "create" %></h2>
+  <%= form_for(@template) do |f| %>
+  <%= render "shared/error_messages", object: @template%>
+    <div class="box tabular">
+    <p>Name<span class="required"> *</span>
+    <%= f.text_field :name, class: "form-control", size: "30x10" %>
+    </p>
+    <p>Status<span class="required"> *</span>
+    <%= f.select :type_template, options_for_select([['Task', 1], ['Bug', 2]]) %>
+    </p>
+    <p>Description<span class="required"> *</span>
+    <%= f.cktext_area :description, rows: 10, class: "description", size: "30x20" %>
+    </p>
+    <p>
+      <%= f.submit t("submit") %>  <%= link_to t("back"), issue_templates_path %>
+    </p>
+  <% end %>
+</div>

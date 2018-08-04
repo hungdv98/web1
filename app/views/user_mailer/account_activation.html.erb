@@ -1,0 +1,7 @@
+<h1><%= t "issue" %></h1>
+
+<p>Hi <%= @user.login_name %></p>
+
+<p>Click on the link to activate your account:</p>
+<%= link_to t("active"), edit_account_activation_url(@user.activation_token,
+  email: @user.email) %>
