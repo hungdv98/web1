@@ -3,9 +3,9 @@
     <h3><%= t "time" %></h3>
     <p><span class="icon icon-time">16.00 giờ</span></p>
     <p>
-      <a href="/projects/ruby-intern-redmine-cl/time_entries/new"><%= t "views.issue.show.add_time" %></a> |
-      <a href="/projects/ruby-intern-redmine-cl/time_entries"><%= t "views.projects.show.details" %></a> |
-      <a href="/projects/ruby-intern-redmine-cl/time_entries/report"><%= t "views.projects.show.report" %></a>
+      <a href="#"><%= t "views.issue.show.add_time" %></a> |
+      <a href="#"><%= t "views.projects.show.details" %></a> |
+      <a href="#"><%= t "views.projects.show.report" %></a>
     </p>
   </div>
 
@@ -62,13 +62,13 @@
       <% g = t.split("/projects/") %>
       <p>
           <%= link_to t("views.projects.index.all_issue"), issues_path %>
+          | <%= link_to t("views.projects.show.calendar"), "#" %>
+          | <%= link_to t("views.projects.show.chart"), "#" %>
           <% if current_user.user_type == 0 %>
             |<%= link_to "Edit", edit_project_path(g[1].to_i) %>
-          <% elsif @project.user_id == current_user.id and current_project != nil  %>
-            |<%= link_to "Edit", edit_project_path(current_project) %>
+          <% elsif @project.user_id == current_user.id %>
+            |<%= link_to "Edit", edit_project_path(g[1].to_i) %>
           <% end %>
-        | <%= link_to t("views.projects.show.calendar"), "#" %>
-        | <%= link_to t("views.projects.show.chart"), "#" %>
       </p>
 
     </div>
