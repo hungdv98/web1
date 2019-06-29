@@ -1,6 +1,6 @@
 <h2>
   <img default="default" rating="PG" alt="" title=""
-    class="gravatar" ssl="false" src="http://www.gravatar.com/avatar/bf15d543da15121752d56fa811f887a3?rating=PG&amp;size=50&amp;default=monsterid"
+    class="gravatar" ssl="false" src="#"
     width="50" height="50" /> <%= @user.login_name %>
 </h2>
 <div class="splitcontentleft">
@@ -12,14 +12,14 @@
 <ul>
   <% @project.each do |project| %>
     <% if Project.where("id=? and user_id=?", project.project_id, current_user.id).count>0%>
-      <li>
+      <li> 
         <%= link_to project.project.name, project_path(project.project.id) %>
         (Manager, <%= project.created_at.strftime("%d-%m-%Y") %>)
       </li>
     <% else %>
       <li>
         <%= link_to project.project.name, project_path(project.project.id) %>
-        (Developer, <%= project.created_at.strftime("%d-%m-%Y") %>)
+        (Worker, <%= project.created_at.strftime("%d-%m-%Y") %>)
       </li>
     <% end %>
   <% end %>

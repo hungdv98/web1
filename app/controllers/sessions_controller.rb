@@ -23,15 +23,6 @@ class SessionsController < ApplicationController
          render :new
        end
       end
-    else
-        user = User.from_omniauth(request.env["omniauth.auth"])
-        if user == nil
-          flash.now[:danger] = t "controllers.sessions.email_taken"
-          redirect_to login_url
-        else
-          log_in user
-          redirect_back_or user
-        end
     end
   end
 

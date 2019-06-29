@@ -201,7 +201,7 @@ vi:
         chart: "Biểu đồ sự kiện"
         member: "Thành viên"
         manager: "Quản lý"
-        developer: "Lập trình viên"
+        developer: "Nhân viên"
         degrade: "Degrade"
     sessions:
       login: "Đăng nhập"
@@ -224,7 +224,7 @@ vi:
         active: "Kích hoạt"
         user_total: "User/Total: "
       new:
-        validate: "Phải dài ít nhất 6 ký tự."
+        validate: "Phải dài ít nhất 8 ký tự."
       show:
         register_on: "Đắng ký vào"
         last_connect: "Lần kết nối cuối cùng"

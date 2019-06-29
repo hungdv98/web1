@@ -156,7 +156,7 @@ en:
         chart: "Event graph"
         member: "Member"
         manager: "Manager"
-        developer: "Developer"
+        developer: "Worker"
         degrade: "Degrade"
     sessions:
       login: "Log in"
@@ -179,7 +179,7 @@ en:
         active: "Active"
         user_total: "User/Total: "
       new:
-        validate: "Must be at least 6 characters long."
+        validate: "Must be at least 8 characters long."
       show:
         register_on: "Registered on"
         last_connect: "Last connection"

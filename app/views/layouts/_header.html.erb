@@ -2,13 +2,23 @@
   <div id="top-menu">
     <div id="account">
       <ul>
+        <li class="language_li">
+          <%= link_to locale:"en" do %>
+            <%= image_tag "united-kingdom.png", class: "language_flag_right" %>
+          <% end %> |
+          <%= link_to locale:"vi" do %>
+            <%= image_tag "vietnam.png", class: "language_flag_left" %>
+          <% end %>
+        </li>
+
         <li><%= link_to t("sign_in"), login_path, class: "login" %></li>
-        <li><%= link_to t("register"), register_path, class: "register" %></a></li>
       </ul>
+
+
     </div>
   </div>
   <div id="header">
-    <%= link_to image_tag("logo.png", alt: " logo"),root_url %>
+    <!%= link_to image_tag("logo.png", alt: " logo"),root_url %>
   </div>
 <% else %>
   <div id="top-menu">
@@ -39,8 +49,6 @@
     <ul>
       <li><%= link_to t("my_page"), my_page_path(current_user.id), class: "my-page" %></li>
       <li><%= link_to t("project"), projects_url, class: "projects" %></li>
-      <li><%= link_to t("help"), "#", class: "help" %></li>
-      <li><%= link_to "Templates", issue_templates_path, class: "help" %></li>
       <% if current_user.user_type==0 %>
         <li>
           <%= link_to t("user"), users_path, class: "fa fa-users" %>
@@ -60,6 +68,8 @@
         <%= submit_tag "Search", id: "search-issue", style: "display: none;" %>
       <% end %>
       <div class="select2-container" id="s2id_project_quick_jump_box" style="width: 210px;">
+        
+
         <% tmp = UserProject.includes(:project).where("user_id = ?", current_user.id) %>
         <%=select_tag "textcolor",
           options_for_select(tmp.all.collect{ |o| [o.project.name, o.project_id] }),
@@ -91,7 +101,7 @@
         </div>
       </div>
     </div>
-    <%= link_to image_tag("logo.png", alt: " logo"),root_url %>
+    <!%= link_to image_tag("logo.png", alt: " logo"),root_url %>
   </div>
   <% get_prj_id %>
   <% if current_project != nil %>
